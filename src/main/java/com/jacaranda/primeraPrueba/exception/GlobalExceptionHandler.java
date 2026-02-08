@@ -1,48 +1,64 @@
 package com.jacaranda.primeraPrueba.exception;
 
-import javax.swing.Spring;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 404 - Recurso no encontrado
-    @ExceptionHandler(ElementNotFoundException.class)
-    public ResponseEntity<String> handleElementNotFound(ElementNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                             .body(ex.getMessage());
-    }
+	// 404 - Elemento no encontrado
+	@ExceptionHandler(ElementNotFoundException.class)
+	public ResponseEntity<ApiError> handleElementNotFound(ElementNotFoundException ex, HttpServletRequest request) {
 
-    // 500 - Error de base de datos
-    @ExceptionHandler(DatabaseException.class)
-    public ResponseEntity<String> handleDatabase(DatabaseException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body("Error de acceso a datos. Inténtelo más tarde.");
-    }
+		ApiError error = new ApiError(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(),
+				ex.getMessage(), request.getRequestURI());
 
-    // 400 - Errores de formato (por ejemplo, ID no numérico)
-    @ExceptionHandler(NumberFormatException.class)
-    public ResponseEntity<String> handleNumberFormat(NumberFormatException ex) {
-        return ResponseEntity.badRequest()
-                             .body("El identificador debe ser un número válido");
-    }
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+	}
 
-    // 400 - Errores de validación manual
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException ex) {
-        return ResponseEntity.badRequest()
-                             .body("Datos inválidos: " + ex.getMessage());
-    }
+	// 500 - Error de base de datos
+	@ExceptionHandler(DatabaseException.class)
+	public ResponseEntity<ApiError> handleDatabase(DatabaseException ex, HttpServletRequest request) {
 
-    // 500 - Cualquier otro error no controlado
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneral(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body("Error interno del servidor");
-    }
+		ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Error de acceso a datos. Inténtelo más tarde.",
+				request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+	}
+
+	// 400 - ID inválido
+	@ExceptionHandler(NumberFormatException.class)
+	public ResponseEntity<ApiError> handleNumberFormat(NumberFormatException ex, HttpServletRequest request) {
+
+		ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
+				"El ID debe ser un número válido", request.getRequestURI());
+
+		return ResponseEntity.badRequest().body(error);
+	}
+
+	// 400 - Validación manual
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+
+		ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
+				"Datos inválidos: " + ex.getMessage(), request.getRequestURI());
+
+		return ResponseEntity.badRequest().body(error);
+	}
+
+	// 500 - cualquier otro error
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ApiError> handleGeneral(Exception ex, HttpServletRequest request) {
+
+		ApiError error = new ApiError(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+				HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Error interno del servidor",
+				request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+	}
 }
-
