@@ -6,9 +6,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.jacaranda.primeraPrueba.dto.ElementRequest;
-import com.jacaranda.primeraPrueba.exception.DatabaseException;
-import com.jacaranda.primeraPrueba.exception.ElementNotFoundException;
-import com.jacaranda.primeraPrueba.exception.InvalidElementException;
+import com.jacaranda.primeraPrueba.exception.element.DatabaseException;
+import com.jacaranda.primeraPrueba.exception.element.ElementNotFoundException;
+import com.jacaranda.primeraPrueba.exception.element.InvalidElementException;
 import com.jacaranda.primeraPrueba.model.Element;
 import com.jacaranda.primeraPrueba.repository.RepositoryElement;
 

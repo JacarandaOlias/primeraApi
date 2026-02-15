@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jacaranda.primeraPrueba.dto.ElementRequest;
-import com.jacaranda.primeraPrueba.exception.BadRequestElementException;
+import com.jacaranda.primeraPrueba.exception.element.BadRequestElementException;
 import com.jacaranda.primeraPrueba.model.Element;
 import com.jacaranda.primeraPrueba.service.ServiceElement;
 

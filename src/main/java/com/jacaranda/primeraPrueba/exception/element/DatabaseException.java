@@ -1,4 +1,4 @@
-package com.jacaranda.primeraPrueba.exception;
+package com.jacaranda.primeraPrueba.exception.element;
 
 // Datos inválidos de negocio
 

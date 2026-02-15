@@ -1,15 +1,14 @@
-package com.jacaranda.primeraPrueba.exception;
+package com.jacaranda.primeraPrueba.exception.user;
 
 import java.util.List;
 
-public class BadRequestElementException extends RuntimeException {
-	
+public class UserException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 	
 	private List<String> messages;
 
-	public BadRequestElementException(List<String> messages) {
-		super();
+		
+	public UserException(List<String> messages) {
 		this.messages = messages;
 	}
 
@@ -22,6 +21,5 @@ public class BadRequestElementException extends RuntimeException {
 	}
 	
 	
-
 
 }

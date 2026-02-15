@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.jacaranda.primeraPrueba.exception.element.BadRequestElementException;
+import com.jacaranda.primeraPrueba.exception.element.DatabaseException;
+import com.jacaranda.primeraPrueba.exception.element.ElementNotFoundException;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice

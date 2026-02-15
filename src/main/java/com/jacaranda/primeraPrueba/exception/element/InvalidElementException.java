@@ -1,4 +1,4 @@
-package com.jacaranda.primeraPrueba.exception;
+package com.jacaranda.primeraPrueba.exception.element;
 
 // Recurso no encontrado
 // Error lógico / de negocio
