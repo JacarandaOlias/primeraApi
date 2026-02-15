@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.jacaranda.primeraPrueba.dto.ElementRequest;
 import com.jacaranda.primeraPrueba.exception.DatabaseException;
 import com.jacaranda.primeraPrueba.exception.ElementNotFoundException;
-import com.jacaranda.primeraPrueba.exception.InvalidElementException;
 import com.jacaranda.primeraPrueba.exception.InvalidElementException;
 import com.jacaranda.primeraPrueba.model.Element;
 import com.jacaranda.primeraPrueba.repository.RepositoryElement;
@@ -23,11 +23,14 @@ public class ServiceElement {
 	}
 
 	// CREATE
-	public Element createElement(Element element) {
+	public Element createElement(ElementRequest elementRequest) {
+		Element element = new Element();
+		element.setName(elementRequest.name());
+		element.setValue(elementRequest.value());
 		try {
 			return elementRepository.save(element);
 		} catch (DataAccessException e) {
-			throw new DatabaseException("No se pudo guardar el elemento en la base de datos", e);
+			throw new DatabaseException("No se pudo guardar el elemento en la base de datos:"+ e.getMessage(), e);
 		}
 	}
 

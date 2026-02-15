@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jacaranda.primeraPrueba.dto.ElementRequest;
 import com.jacaranda.primeraPrueba.exception.BadRequestElementException;
 import com.jacaranda.primeraPrueba.model.Element;
 import com.jacaranda.primeraPrueba.service.ServiceElement;
@@ -47,7 +48,7 @@ public class ControllerElement {
 
 	// CREATE - Nuevo elemento
 	@PostMapping
-	public ResponseEntity<?> add(@Valid @RequestBody Element element, BindingResult result) {
+	public ResponseEntity<?> add(@Valid @RequestBody ElementRequest elementRequest, BindingResult result) {
 		if (result.hasErrors()) {
 			List<String> errores = result.getFieldErrors()
 	                .stream()
@@ -57,7 +58,7 @@ public class ControllerElement {
 
 		}
 
-		Element saved = serviceElement.createElement(element);
+		Element saved = serviceElement.createElement(elementRequest);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
 
