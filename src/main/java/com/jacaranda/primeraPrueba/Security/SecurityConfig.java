@@ -18,7 +18,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
 
 		http
         .csrf(csrf -> csrf.disable())
@@ -27,7 +27,10 @@ public class SecurityConfig {
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .requestMatchers("/register", "/login").permitAll()
             .anyRequest().authenticated()
-        );
+        )
+        .exceptionHandling(ex -> ex
+        		.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+        		);
 
        
 		return http.build();
