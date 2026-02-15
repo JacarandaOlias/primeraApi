@@ -1,5 +1,7 @@
 package com.jacaranda.primeraPrueba.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jacaranda.primeraPrueba.exception.BadRequestElementException;
 import com.jacaranda.primeraPrueba.model.Element;
 import com.jacaranda.primeraPrueba.service.ServiceElement;
 
@@ -46,7 +49,12 @@ public class ControllerElement {
 	@PostMapping
 	public ResponseEntity<?> add(@Valid @RequestBody Element element, BindingResult result) {
 		if (result.hasErrors()) {
-			throw new IllegalArgumentException(result.getFieldErrors().toString());
+			List<String> errores = result.getFieldErrors()
+	                .stream()
+	                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+	                .toList();
+	    	throw new BadRequestElementException(errores);
+
 		}
 
 		Element saved = serviceElement.createElement(element);

@@ -2,20 +2,21 @@ package com.jacaranda.primeraPrueba.exception;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ApiError {
 
     private LocalDateTime timestamp;
     private int status;
     private String error;
-    private String message;
+    private List<String> messages;
     private String path; // para la URI que causó el error
 
-    public ApiError(int status, String error, String message, String path) {
+    public ApiError(int status, String error, List<String> messages, String path) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.error = error;
-        this.message = message;
+        this.messages = messages;
         this.path = path;
     }
 
@@ -43,12 +44,12 @@ public class ApiError {
 		this.error = error;
 	}
 
-	public String getMessage() {
-		return message;
+	public List<String> getMessages() {
+		return messages;
 	}
 
-	public void setMessage(String message) {
-		this.message = message;
+	public void setMessages(List<String> messages) {
+		this.messages = messages;
 	}
 
 	public String getPath() {
