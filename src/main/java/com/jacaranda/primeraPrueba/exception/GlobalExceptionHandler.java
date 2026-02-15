@@ -4,18 +4,52 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.jacaranda.primeraPrueba.exception.element.BadRequestElementException;
 import com.jacaranda.primeraPrueba.exception.element.DatabaseException;
 import com.jacaranda.primeraPrueba.exception.element.ElementNotFoundException;
+import com.jacaranda.primeraPrueba.exception.user.UserException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+	
+	@ExceptionHandler({BadCredentialsException.class, UsernameNotFoundException.class})
+    public ResponseEntity<ApiError> handleAuthenticationExceptions(Exception ex,  HttpServletRequest request) {
+
+        ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase(),
+	            List.of("Credenciales incorrectas"),request.getRequestURI()
+	    );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+	
+	//400 error en JSON
+		@ExceptionHandler(HttpMessageNotReadableException.class)
+		public ResponseEntity<ApiError> handleJsonParseError(HttpMessageNotReadableException ex,  HttpServletRequest request) {
+		    ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST.getReasonPhrase(),
+		            List.of("El JSON enviado no es válido"),request.getRequestURI()
+		    );
+
+		    return ResponseEntity.badRequest().body(error);
+		}
+		
+	@ExceptionHandler(UserException.class)
+	public ResponseEntity<ApiError> UserException(UserException ex, HttpServletRequest request) {
+
+		ApiError error = new ApiError(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(),
+				ex.getMessages(), request.getRequestURI());
+
+		return ResponseEntity.badRequest().body(error);
+	}
+	
+	
 	@ExceptionHandler(BadRequestElementException.class)
 	public ResponseEntity<ApiError> BadRequestElementException(BadRequestElementException ex, HttpServletRequest request) {
 
